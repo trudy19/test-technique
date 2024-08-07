@@ -1,0 +1,24 @@
+# Drawing Rectangles
+
+Ce projet est une application Web simple permettant de dessiner, faire tourner et repeindre des rectangles sur un canvas HTML. L'application est écrite en TypeScript et utilise Webpack pour la compilation et le bundling.
+
+## Fonctionnalités
+
+- Dessin de rectangles de couleur aléatoire avec la souris.
+- Rotation des rectangles au double-clic et suppression après la fin de la rotation.
+- attendre que toute les rectangle complete leur rotation pour la suppression
+- Repeindre deux rectangles ayant la plus petite différence d'aire avec une couleur aléatoire.
+
+## Prérequis
+
+- Node.js
+- npm (Node Package Manager)
+
+## Installation
+
+1. Clonez ce dépôt sur votre machine locale :
+
+```sh
+git clone https://github.com/trudy19/test-technique
+
+```
