@@ -80,16 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function isMouseOnRectangle(x: number, y: number): boolean {
-    return rectangles.some(
-      (rect) =>
-        x >= rect.x &&
-        x <= rect.x + rect.width &&
-        y >= rect.y &&
-        y <= rect.y + rect.height
-    );
-  }
-
   function rotateAndRemoveRectangle(event: MouseEvent): void {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -134,28 +124,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function repaintRectangles(): void {
-    if (rectangles.length < 2) return;
+    const numRects = rectangles.length;
+    if (numRects < 2) return;
 
-    let minDiff = canvas.width * canvas.height;
+    const rectsWithArea = rectangles.map((rect, index) => ({
+      rect,
+      area: rect.width * rect.height,
+      index,
+    }));
+
+    rectsWithArea.sort((a, b) => a.area - b.area);
+
+    let minDiff = Infinity;
     let pair: Rectangle[] = [];
-    const areas = rectangles.map((rect) => rect.width * rect.height);
 
-    for (let i = 0; i < rectangles.length - 1; i++) {
-      for (let j = i + 1; j < rectangles.length; j++) {
-        const diff = Math.abs(areas[i] - areas[j]);
-
-        if (diff < minDiff) {
-          minDiff = diff;
-          pair = [rectangles[i], rectangles[j]];
-        }
+    for (let i = 0; i < numRects - 1; i++) {
+      const diff = rectsWithArea[i + 1].area - rectsWithArea[i].area;
+      if (diff < minDiff) {
+        minDiff = diff;
+        pair = [rectsWithArea[i].rect, rectsWithArea[i + 1].rect];
       }
     }
 
-    const newColor = getRandomColor();
-    pair.forEach((rect) => {
-      rect.color = newColor;
-    });
-    drawAllRectangles();
+    if (pair) {
+      const newColor = getRandomColor();
+      pair[0].color = newColor;
+      pair[1].color = newColor;
+      drawAllRectangles();
+    }
   }
 
   function drawAllRectangles(): void {
